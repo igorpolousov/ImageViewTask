@@ -24,7 +24,9 @@ class ImageController: UICollectionViewController {
         super.viewDidLoad()
         title = "Image Viewer"
         
-        let url = URL(string: urlString)
+        loadData()
+        
+        //let url = URL(string: urlString)
 
         //request(url: url!)
         fetchData()
@@ -57,15 +59,21 @@ class ImageController: UICollectionViewController {
     // Добавление даты к картинкам
     func addDate() {
         for image in imagesFromServer {
-            let imageURL = image.largeImageURL
+            var imageData = Data()
+            if let url = URL(string: image.largeImageURL) {
+                if let data = try? Data(contentsOf: url) {
+                   imageData = data
+                }
+            }
             let loadDate = getDate()
-            let imageDate = ImageDate(imageUrl: imageURL, loadDate: loadDate)
+            let likes = image.likes
+            let views = image.views
+            let imageDate = ImageDate(imageData: imageData, loadDate: loadDate, likes: likes, views: views)
             imagesForCollection.append(imageDate)
+            saveData()
         }
     }
    
-
-
     // MARK: UICollectionViewDataSource
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
@@ -81,23 +89,19 @@ class ImageController: UICollectionViewController {
     
         cell.applyCellDesign()
         cell.imageForCell.applyCellImageDesign()
-        let likesCount = imagesFromServer[indexPath.item].likes
-        let viewsCount = imagesFromServer[indexPath.item].views
         
-        if let url = URL(string: imagesFromServer[indexPath.item].largeImageURL) {
-            if let data = try? Data(contentsOf: url) {
-                cell.imageForCell.image = UIImage(data: data)
-                
-                cell.dateLabel.text = "Likes: \(likesCount) Views: \(viewsCount)"
-                return cell
-            }
-        }
+        let likesCount = imagesForCollection[indexPath.item].likes
+        let viewsCount = imagesForCollection[indexPath.item].views
+        let data = imagesForCollection[indexPath.item].imageData
+        
+        cell.imageForCell.image = UIImage(data: data)
+        cell.dateLabel.text = "Likes: \(likesCount) Views: \(viewsCount)"
         return cell
     }
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let vc = storyboard?.instantiateViewController(withIdentifier: "Detail") as? DetailViewController {
-            vc.receivedImage = imagesFromServer[indexPath.item].largeImageURL
+            vc.receivedImage = imagesForCollection[indexPath.item].imageData
             vc.loadImageDate = imagesForCollection[indexPath.item].loadDate
             navigationController?.pushViewController(vc, animated: true)
         }
