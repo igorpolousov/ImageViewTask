@@ -10,13 +10,15 @@ import UIKit
 class DetailViewController: UIViewController {
     
     @IBOutlet var fullSizeImage: UIImageView!
-    var receivedImage: UIImage?
+    var receivedImage: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if let imageToLoad = receivedImage {
-            fullSizeImage.image = imageToLoad
+        if let url = URL(string: receivedImage!) {
+            if let data = try? Data(contentsOf: url) {
+                fullSizeImage.image = UIImage(data: data)
+            }
         }
         
     }

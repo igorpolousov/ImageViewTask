@@ -16,21 +16,22 @@ class ImageController: UICollectionViewController {
     
     
     var imagesFromServer = [Image]()
+    var imagesForCollection = [ImageDate]()
+    
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = "Image Viewer"
+        
         let url = URL(string: urlString)
 
         request(url: url!)
         fetchData()
-        
-        title = "Image Viewer"
-
+        addDate()
     }
     
     // MARK: Get data from server
-   
-    
     func fetchData() {
         if let url = URL(string: urlString) {
             if let data = try? Data(contentsOf: url) {
@@ -53,18 +54,26 @@ class ImageController: UICollectionViewController {
         }
     }
 
+    // Добавление даты к картинкам
+    func addDate() {
+        for image in imagesFromServer {
+            let imageURL = image.largeImageURL
+            let loadDate = getDate()
+            let imageDate = ImageDate(imageUrl: imageURL, loadDate: loadDate)
+            imagesForCollection.append(imageDate)
+        }
+    }
    
 
 
     // MARK: UICollectionViewDataSource
-
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
 
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return imagesFromServer.count
+        return imagesForCollection.count
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -73,20 +82,19 @@ class ImageController: UICollectionViewController {
         cell.applyCellDesign()
         cell.imageForCell.applyCellImageDesign()
         
-        if let url = URL(string: imagesFromServer[indexPath.item].largeImageURL) {
+        if let url = URL(string: imagesForCollection[indexPath.item].imageUrl) {
             if let data = try? Data(contentsOf: url) {
                 cell.imageForCell.image = UIImage(data: data)
+                cell.dateLabel.text = imagesForCollection[indexPath.item].loadDate
+                return cell
             }
         }
-
-        //cell.dateLabel.text = cellData.date
-    
         return cell
     }
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let vc = storyboard?.instantiateViewController(withIdentifier: "Detail") as? DetailViewController {
-            vc.receivedImage = images[indexPath.item].image
+            vc.receivedImage = imagesFromServer[indexPath.item].largeImageURL
             navigationController?.pushViewController(vc, animated: true)
         }
     }

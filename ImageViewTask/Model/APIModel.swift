@@ -17,6 +17,12 @@ struct Image: Codable {
     var largeImageURL: String
 }
 
+// Структура для загрузки данных в collection view image url + date
+struct ImageDate {
+    var imageUrl: String
+    var loadDate: String
+}
+
 // Указание даты скачивания картинки
 func getDate() -> String {
     let date = Date()
