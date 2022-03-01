@@ -20,7 +20,7 @@ struct Image: Codable {
 }
 
 // Структура для загрузки данных в collection view image url + date
-struct ImageDate {
+struct ImageDate: Codable {
     var imageUrl: String
     var loadDate: String
 }

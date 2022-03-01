@@ -102,4 +102,28 @@ class ImageController: UICollectionViewController {
             navigationController?.pushViewController(vc, animated: true)
         }
     }
+    
+    func saveData() {
+        let jsonEncoder = JSONEncoder()
+        if let savedData = try? jsonEncoder.encode(imagesForCollection) {
+            let defaults = UserDefaults.standard
+            defaults.setValue(savedData, forKey: "images")
+        } else {
+            let ac = UIAlertController(title: "Failed to save images", message: nil, preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "Ok", style: .cancel))
+            present(ac, animated: true)
+        }
+    }
+    
+    func loadData() {
+        let defaults = UserDefaults.standard
+        if let savedPictures = defaults.object(forKey: "images") as? Data {
+            let jsonDecoder = JSONDecoder()
+            do {
+                try imagesForCollection = jsonDecoder.decode([ImageDate].self, from: savedPictures)
+            } catch {
+                print("Failed to load data")
+            }
+        }
+    }
 }
