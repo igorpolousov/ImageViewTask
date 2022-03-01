@@ -26,7 +26,7 @@ class ImageController: UICollectionViewController {
         
         let url = URL(string: urlString)
 
-        request(url: url!)
+        //request(url: url!)
         fetchData()
         addDate()
     }
@@ -81,11 +81,14 @@ class ImageController: UICollectionViewController {
     
         cell.applyCellDesign()
         cell.imageForCell.applyCellImageDesign()
+        let likesCount = imagesFromServer[indexPath.item].likes
+        let viewsCount = imagesFromServer[indexPath.item].views
         
-        if let url = URL(string: imagesForCollection[indexPath.item].imageUrl) {
+        if let url = URL(string: imagesFromServer[indexPath.item].largeImageURL) {
             if let data = try? Data(contentsOf: url) {
                 cell.imageForCell.image = UIImage(data: data)
-                cell.dateLabel.text = imagesForCollection[indexPath.item].loadDate
+                
+                cell.dateLabel.text = "Likes: \(likesCount) Views: \(viewsCount)"
                 return cell
             }
         }
@@ -95,6 +98,7 @@ class ImageController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let vc = storyboard?.instantiateViewController(withIdentifier: "Detail") as? DetailViewController {
             vc.receivedImage = imagesFromServer[indexPath.item].largeImageURL
+            vc.loadImageDate = imagesForCollection[indexPath.item].loadDate
             navigationController?.pushViewController(vc, animated: true)
         }
     }

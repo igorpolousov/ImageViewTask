@@ -15,6 +15,8 @@ struct ImageContainer: Codable {
 
 struct Image: Codable {
     var largeImageURL: String
+    var likes: Int
+    var views: Int
 }
 
 // Структура для загрузки данных в collection view image url + date
