@@ -8,7 +8,40 @@
 import Foundation
 import UIKit
 
-// Структура для проверки работы интерфейса
+// MARK: API Struct
+struct ImageContainer: Codable {
+    var hits: [Image]
+}
+
+struct Image: Codable {
+    var largeImageURL: String
+}
+
+// Указание даты скачивания картинки
+func getDate() -> String {
+    let date = Date()
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "dd.MM.YYYY"
+    let formatedDate = dateFormatter.string(from: date as Date)
+    return formatedDate
+}
+
+
+
+// Ответ сервера на запрос для составления структуры получения данных JSON
+func request(url: URL) {
+    let session = URLSession.shared
+    let request = URLRequest(url: url)
+    let task = session.dataTask(with: request) { data, response, error in
+        let json =  try? JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers)
+        let jsonData = try? JSONSerialization.data(withJSONObject: json as Any, options: .prettyPrinted)
+        print(String(decoding: jsonData!, as: UTF8.self))
+    
+    }
+    task.resume()
+}
+
+ // Структура для проверки работы интерфейса
 struct ImageTalantix {
     var date: String
     var image: UIImage
