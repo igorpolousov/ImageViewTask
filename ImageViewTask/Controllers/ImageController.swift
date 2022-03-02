@@ -14,7 +14,7 @@ class ImageController: UICollectionViewController {
     let apiKey = "25936770-73650d518ff8e40b1b22606c0"
     var urlString = "https://pixabay.com/api/?key=25936770-73650d518ff8e40b1b22606c0&q=yellow+flowers&image_type=photo"
     
-    
+    var query = ""
     var imagesFromServer = [Image]()
     var imagesForCollection = [ImageDate]()
     
@@ -24,19 +24,21 @@ class ImageController: UICollectionViewController {
         super.viewDidLoad()
         title = "Pixabay viewer"
         navigationController?.navigationBar.prefersLargeTitles = true
-        
-        urlString = "https://pixabay.com/api/?key=\(apiKey)&q=yellow+flowers&image_type=photo"
+       
         
         loadData()
         
         //let url = URL(string: urlString
         //request(url: url!)
         DispatchQueue.global().async {
+            self.query = "kids" // yellow+flowers, blue+flowers, rose+flowers
+            self.urlString = "https://pixabay.com/api/?key=\(self.apiKey)&q=\(self.query)&image_type=photo"
+            
             self.fetchData()
             self.addDate()
             
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
+            DispatchQueue.main.async { [weak self] in
+                self?.collectionView.reloadData()
             }
         }
         
@@ -82,7 +84,10 @@ class ImageController: UICollectionViewController {
             if !imagesForCollection.contains(imageDate) {
                 imagesForCollection.append(imageDate)
             }
-            saveData()
+            DispatchQueue.global().async {[weak self] in
+                self?.saveData()
+            }
+            
         }
     }
    
