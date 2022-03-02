@@ -20,11 +20,15 @@ struct Image: Codable {
 }
 
 // Структура для загрузки данных в collection view image url + date
-struct ImageDate: Codable {
+struct ImageDate: Codable, Equatable {
     var imageData: Data
     var loadDate: String
     var likes: Int
     var views: Int
+    
+    static func == (lhs: ImageDate, rhs: ImageDate) -> Bool {
+        return lhs.imageData == rhs.imageData
+    }
 }
 
 // Указание даты скачивания картинки

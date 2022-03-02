@@ -12,7 +12,7 @@ class ImageController: UICollectionViewController {
     private let reuseIdentifier = "Cell"
     
     let apiKey = "25936770-73650d518ff8e40b1b22606c0"
-    let urlString = "https://pixabay.com/api/?key=25936770-73650d518ff8e40b1b22606c0&q=yellow+flowers&image_type=photo"
+    var urlString = "https://pixabay.com/api/?key=25936770-73650d518ff8e40b1b22606c0&q=yellow+flowers&image_type=photo"
     
     
     var imagesFromServer = [Image]()
@@ -23,6 +23,7 @@ class ImageController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Image Viewer"
+        urlString = "https://pixabay.com/api/?key=\(apiKey)&q=yellow+flowers&image_type=photo"
         
         loadData()
         
@@ -69,7 +70,10 @@ class ImageController: UICollectionViewController {
             let likes = image.likes
             let views = image.views
             let imageDate = ImageDate(imageData: imageData, loadDate: loadDate, likes: likes, views: views)
-            imagesForCollection.append(imageDate)
+            // Проверка на наличие элемента в массиве перед добавлением
+            if !imagesForCollection.contains(imageDate) {
+                imagesForCollection.append(imageDate)
+            }
             saveData()
         }
     }
