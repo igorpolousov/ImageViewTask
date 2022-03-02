@@ -16,6 +16,8 @@ class DetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationItem.largeTitleDisplayMode = .never
+        
         if let titleToLoad = loadImageDate {
             title = titleToLoad
         }
@@ -23,5 +25,16 @@ class DetailViewController: UIViewController {
         if let data = receivedImage {
             fullSizeImage.image = UIImage(data: data)
         }
+    }
+    
+    // Making navigation controller dissapear on tap
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.hidesBarsOnTap = true
+    }
+    // making navigation controller appear on tap
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.hidesBarsOnTap = false
     }
 }

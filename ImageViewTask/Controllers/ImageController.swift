@@ -22,14 +22,15 @@ class ImageController: UICollectionViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Image Viewer"
+        title = "Pixabay viewer"
+        navigationController?.navigationBar.prefersLargeTitles = true
         urlString = "https://pixabay.com/api/?key=\(apiKey)&q=yellow+flowers&image_type=photo"
         
         loadData()
         
-        //let url = URL(string: urlString)
-
+        //let url = URL(string: urlString
         //request(url: url!)
+        
         fetchData()
         addDate()
     }
