@@ -46,6 +46,7 @@ https://talantix.ru/ats/testTasks/69c567259dc249fcad103eb65830c96b
 
 11. Добавлена многопоточность через DispatchQueue.
 
-ScreenShots:
+
 <img width="343" alt="Screenshot 2022-03-02 at 10 14 14" src="https://user-images.githubusercontent.com/78177975/156319258-eec66e9f-4d25-492e-be0f-8ab7c7eeb4cf.png">
+
 <img width="352" alt="Screenshot 2022-03-02 at 10 14 45" src="https://user-images.githubusercontent.com/78177975/156319308-67856db6-675b-4321-a4b7-68e8dd2e7d39.png">
