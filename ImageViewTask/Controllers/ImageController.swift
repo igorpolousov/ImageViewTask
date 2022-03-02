@@ -24,15 +24,22 @@ class ImageController: UICollectionViewController {
         super.viewDidLoad()
         title = "Pixabay viewer"
         navigationController?.navigationBar.prefersLargeTitles = true
+        
         urlString = "https://pixabay.com/api/?key=\(apiKey)&q=yellow+flowers&image_type=photo"
         
         loadData()
         
         //let url = URL(string: urlString
         //request(url: url!)
+        DispatchQueue.global().async {
+            self.fetchData()
+            self.addDate()
+            
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+            }
+        }
         
-        fetchData()
-        addDate()
     }
     
     // MARK: Get data from server
